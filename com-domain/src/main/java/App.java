@@ -1,12 +1,8 @@
 import dao.DaoFactory;
-import dao.UserDao;
-import dao.impl.UserDaoImpl;
-import dao.impl.WeightDaoImpl;
 import model.Friction;
-import model.Users;
 import model.Weight;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Serg on 17.09.2017.
@@ -14,31 +10,83 @@ import java.util.Date;
 public class App {
     public static void main(String[] args) {
 
-        UserDao userDao = DaoFactory.getInstance().getUserDao();
-       /* Users user = new Users();
-        user.setLogin("litovka");
-        user.setPassword("root");
-        user.setFirstname("Serg");
-        user.setLastname("Litovka");
-        user.setRole(Users.RoleType.ROLE_ADMIN);
-        userDao.create(user);*/
-        System.out.println(userDao.getList());
+        //UserDao userDao = DaoFactory.getInstance().getUserDao();
+//        Users user = new Users();
+//        user.setLogin("litovka1");
+//        user.setPassword("root");
+//        user.setFirstname("Serg");
+//        user.setLastname("Litovka");
+//        userDao.create(user);
+
+//        Users users = userDao.getById(10);
+//        users.setLogin("papa");
+//        userDao.update(users);
+////
+//
+
+//        List list = userDao.getList();
+//        for (Object o : list) {
+//            System.out.println((Users)o);
+//        }
+
+//
+//
+//        user.setWeightsById();
+//        userDao.create(user);
+//        System.out.println(userDao.getList());
         //System.out.println(userDao.getByLogin("litovka"));
        // userDao.removeById(6);
        // System.out.println(userDao.getList());
-      /*  Weight weight = new Weight();
-        weight.setIdUser(7);
-        weight.setDate(new Date());
-        weight.setTime(2);
-        weight.setWeight("0.088");
-        weight.setUsersByIdUser(userDao.getById(7));
-        DaoFactory.getInstance().getWeightDao().create(weight);*/
-        System.out.println(DaoFactory.getInstance().getWeightDao().getList());
+//        Weight weight = new Weight();
+//        Users user = userDao.getById(10);
+//        weight.setIdUser(user.getId());
+//        weight.setDate(new Date());
+//        weight.setTime(3);
+//        weight.setWeight("0.099");
+//        weight.setUsersByIdUser(user);
+//        DaoFactory.getInstance().getWeightDao().create(weight);
+
+
+/*        List list = userDao.getById(7).getWeightsById();
+        for (Object o : list) {
+            System.out.println((Weight) o);
+        }
+
+        System.out.println(DaoFactory.getInstance().getWeightDao().getById(1));
+        System.out.println(DaoFactory.getInstance().getWeightDao().getById(2));
+        System.out.println(DaoFactory.getInstance().getWeightDao().getById(3));*/
+
+
+//        System.out.println(DaoFactory.getInstance().getWeightDao().getList());
+
+
+/*
+        Weight weight = DaoFactory.getInstance().getWeightDao().getById(2);
         Friction friction = new Friction();
-        friction.setIdWeight(2);
-        friction.setLoad(500);
-        friction.setCoef(0.002);
-        friction.setWeightByIdWeight(DaoFactory.getInstance().getWeightDao().getById(2));
+
+        List<Friction> frictionList = weight.getFrictionsById();
+
+
+        friction.setLoads(500);
+        friction.setCoef("0.002");
+        friction.setWeightByIdWeight(weight);
+
+        friction.setIdWeight(weight.getId());
+
+        System.out.println(friction);
+
+        frictionList.add(friction);
+        weight.setFrictionsById(frictionList);
         DaoFactory.getInstance().getFrictionDao().create(friction);
+
+        DaoFactory.getInstance().getWeightDao().update(weight);
+*/
+
+
+
+
+
+
+
     }
 }

@@ -4,7 +4,7 @@ import model.Users;
 import model.Weight;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Serg on 23.09.2017.
@@ -15,8 +15,7 @@ public class UserDto {
     private String password;
     private String firstname;
     private String lastname;
-    private RoleTypeDto role;
-    private Collection<WeightDto> weightsById = new ArrayList<>();
+    private List<WeightDto> weightsById;
 
     public UserDto() {
     }
@@ -28,17 +27,10 @@ public class UserDto {
         this.firstname = user.getFirstname();
         this.lastname = user.getLastname();
 
-        for (RoleTypeDto roleTypeDto : RoleTypeDto.values()) {
-            if (user.getRole().toString().equals(roleTypeDto.toString())) {
-                this.role = RoleTypeDto.valueOf(user.getRole().toString());
-            }
-        }
-
-
         if (user.getWeightsById() != null) {
-            this.weightsById = new ArrayList<>();
+            weightsById = new ArrayList<>();
             for (Weight weight : user.getWeightsById()) {
-                this.weightsById.add(new WeightDto(weight));
+                weightsById.add(new WeightDto(weight));
             }
         }
 
@@ -89,14 +81,6 @@ public class UserDto {
     }
 
 
-    public RoleTypeDto getRole() {
-        return role;
-    }
-
-    public void setRole(RoleTypeDto role) {
-        this.role = role;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,11 +106,11 @@ public class UserDto {
         return result;
     }
 
-    public Collection<WeightDto> getWeightsById() {
+    public List<WeightDto> getWeightsById() {
         return weightsById;
     }
 
-    public void setWeightsById(Collection<WeightDto> weightsById) {
+    public void setWeightsById(List<WeightDto> weightsById) {
 
         this.weightsById = weightsById;
     }
@@ -139,15 +123,7 @@ public class UserDto {
                 ", password='" + password + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", role=" + role +
                 '}';
     }
-
-    public enum RoleTypeDto {
-        ROLE_ADMIN, ROLE_USER;
-
-
-    }
-
 
 }

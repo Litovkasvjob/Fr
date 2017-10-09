@@ -42,20 +42,31 @@ public class FrictionServiceImpl implements FrictionDtoIn {
     @Override
     public FrictionDto create(FrictionDto o) {
         Friction friction = createFriction(o);
-        Friction frictionReturn = frictionDao.create(friction);
-        FrictionDto frictionDto = new FrictionDto(frictionReturn);
+        FrictionDto frictionDto = new FrictionDto(friction);
         return frictionDto;
     }
 
     @Override
     public boolean update(FrictionDto o) {
-        Friction friction = createFriction(o);
+        Friction friction = new Friction();
+        //friction.setId(o.getId());
+        friction.setIdWeight(o.getIdWeight());
+        friction.setLoads(o.getLoads());
+        friction.setCoef(o.getCoef());
+
+        friction.setWeightByIdWeight(weightDao.getById(o.getIdWeight()));
         return frictionDao.update(friction);
     }
 
     @Override
     public boolean remove(FrictionDto o) {
-        Friction friction = createFriction(o);
+        Friction friction = new Friction();
+        friction.setId(o.getId());
+        friction.setIdWeight(o.getIdWeight());
+        friction.setLoads(o.getLoads());
+        friction.setCoef(o.getCoef());
+
+        friction.setWeightByIdWeight(weightDao.getById(o.getIdWeight()));
         return frictionDao.remove(friction);
     }
 
@@ -70,12 +81,13 @@ public class FrictionServiceImpl implements FrictionDtoIn {
 
     public Friction createFriction(FrictionDto frictionDto) {
         Friction friction = new Friction();
-        friction.setId(frictionDto.getId());
+        friction.setId(frictionDto.getId()); //TODO: check maybe error
         friction.setIdWeight(frictionDto.getIdWeight());
-        friction.setLoad(frictionDto.getLoad());
+        friction.setLoads(frictionDto.getLoads());
         friction.setCoef(frictionDto.getCoef());
 
         friction.setWeightByIdWeight(weightDao.getById(frictionDto.getIdWeight()));
-        return friction;
+        Friction frictionReturn = frictionDao.create(friction);
+        return frictionReturn;
     }
 }

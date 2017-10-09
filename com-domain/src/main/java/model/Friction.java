@@ -1,7 +1,6 @@
 package model;
 
 import javax.persistence.*;
-import java.util.Arrays;
 
 /**
  * Created by Serg on 17.09.2017.
@@ -10,12 +9,15 @@ import java.util.Arrays;
 public class Friction {
     private int id;
     private int idWeight;
-    private int load;
+    private int loads;
     private double coef_friction;
     private Weight weightByIdWeight;
 
+    public Friction() {
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -36,17 +38,17 @@ public class Friction {
     }
 
     @Basic
-    @Column(name = "load")
-    public int getLoad() {
-        return load;
+    @Column(name = "loads", nullable = false)
+    public int getLoads() {
+        return loads;
     }
 
-    public void setLoad(int result) {
-        this.load = result;
+    public void setLoads(int result) {
+        this.loads = result;
     }
 
     @Basic
-    @Column(name = "coef_friction")
+    @Column(name = "coef_friction", nullable = false)
     public double getCoef() {
         return coef_friction;
     }
@@ -64,9 +66,8 @@ public class Friction {
 
         if (id != friction.id) return false;
         if (idWeight != friction.idWeight) return false;
-        if (load != friction.load) return false;
-        if (Double.compare(friction.coef_friction, coef_friction) != 0) return false;
-        return weightByIdWeight != null ? weightByIdWeight.equals(friction.weightByIdWeight) : friction.weightByIdWeight == null;
+        if (loads != friction.loads) return false;
+        return Double.compare(friction.coef_friction, coef_friction) == 0;
 
     }
 
@@ -76,10 +77,9 @@ public class Friction {
         long temp;
         result = id;
         result = 31 * result + idWeight;
-        result = 31 * result + load;
+        result = 31 * result + loads;
         temp = Double.doubleToLongBits(coef_friction);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (weightByIdWeight != null ? weightByIdWeight.hashCode() : 0);
         return result;
     }
 
@@ -91,5 +91,15 @@ public class Friction {
 
     public void setWeightByIdWeight(Weight weightByIdWeight) {
         this.weightByIdWeight = weightByIdWeight;
+    }
+
+    @Override
+    public String toString() {
+        return "Friction{" +
+                "id=" + id +
+                ", idWeight=" + idWeight +
+                ", load=" + loads +
+                ", coef_friction=" + coef_friction +
+                '}';
     }
 }

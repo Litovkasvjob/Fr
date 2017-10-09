@@ -9,7 +9,7 @@ public class FrictionDto {
 
     private int id;
     private int idWeight;
-    private int load;
+    private int loads;
     private double coef_friction;
     private WeightDto weightByIdWeight;
 
@@ -19,7 +19,7 @@ public class FrictionDto {
     public FrictionDto(Friction friction) {
         this.id = friction.getId();
         this.idWeight = friction.getIdWeight();
-        this.load = friction.getLoad();
+        this.loads = friction.getLoads();
         this.coef_friction = friction.getCoef();
         this.weightByIdWeight = new WeightDto(friction.getWeightByIdWeight());
 
@@ -44,12 +44,12 @@ public class FrictionDto {
     }
 
 
-    public int getLoad() {
-        return load;
+    public int getLoads() {
+        return loads;
     }
 
-    public void setLoad(int result) {
-        this.load = result;
+    public void setLoads(int result) {
+        this.loads = result;
     }
 
 
@@ -70,7 +70,7 @@ public class FrictionDto {
 
         if (id != that.id) return false;
         if (idWeight != that.idWeight) return false;
-        if (load != that.load) return false;
+        if (loads != that.loads) return false;
         return Double.compare(that.coef_friction, coef_friction) == 0;
 
     }
@@ -81,7 +81,7 @@ public class FrictionDto {
         long temp;
         result = id;
         result = 31 * result + idWeight;
-        result = 31 * result + load;
+        result = 31 * result + loads;
         temp = Double.doubleToLongBits(coef_friction);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;

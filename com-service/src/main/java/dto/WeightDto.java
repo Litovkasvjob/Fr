@@ -19,18 +19,18 @@ public class WeightDto {
     private int idUser;
     private Date date;
     private int time;
-    private String weight;
-    private Collection<FrictionDto> frictionsById = new ArrayList<>();
+    private double weight;
+    private List<FrictionDto> frictionsById;
     private UserDto usersByIdUser;
 
     public WeightDto() {
     }
 
     public WeightDto(Weight weight) {
-        id = weight.getId();
-        idUser = weight.getIdUser();
-        date = weight.getDate();
-        time = weight.getTime();
+        this.id = weight.getId();
+        this.idUser = weight.getIdUser();
+        this.date = weight.getDate();
+        this.time = weight.getTime();
         this.weight = weight.getWeight();
 
 
@@ -41,7 +41,7 @@ public class WeightDto {
             }
         }
 
-        if (weight.getUsersByIdUser() != null) {
+        if (weight.getFrictionsById().size() != 0) {
             this.usersByIdUser = new UserDto(weight.getUsersByIdUser());
         }
 
@@ -80,19 +80,19 @@ public class WeightDto {
         this.time = time;
     }
 
-    public String getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
-    public Collection<FrictionDto> getFrictionsById() {
+    public List<FrictionDto> getFrictionsById() {
         return frictionsById;
     }
 
-    public void setFrictionsById(Collection<FrictionDto> frictionsById) {
+    public void setFrictionsById(List<FrictionDto> frictionsById) {
         this.frictionsById = frictionsById;
     }
 

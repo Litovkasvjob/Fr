@@ -3,16 +3,13 @@ package service.impl;
 import dao.DaoFactory;
 import dao.UserDao;
 import dao.WeightDao;
-import dto.FrictionDto;
 import dto.UserDto;
 import dto.WeightDto;
-import model.Friction;
 import model.Users;
 import model.Weight;
 import service.app.UserDtoIn;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -47,25 +44,18 @@ public class UserServiceImpl implements UserDtoIn {
     @Override
     public UserDto create(UserDto o) {
         Users user = new Users();
-        user.setId(o.getId());
+        //user.setId(o.getId());
         user.setLogin(o.getLogin());
         user.setPassword(o.getPassword());
         user.setFirstname(o.getFirstname());
         user.setLastname(o.getLastname());
 
         if (o.getWeightsById() != null) {
-            Collection<Weight> list = new ArrayList<>();
+            List<Weight> list = new ArrayList<>();
             for (WeightDto weightDto : o.getWeightsById()) {
-                list.add(createWeight(weightDto));
+                list.add(WeightServiceImpl.getInstance().createWeight(weightDto));
             }
-
             user.setWeightsById(list);
-        }
-
-        for (Users.RoleType roleType : Users.RoleType.values()) {
-            if (o.getRole().toString().equals(roleType.toString())) {
-                user.setRole(roleType);
-            }
         }
 
         Users userReturn = userDao.create(user);
@@ -82,17 +72,13 @@ public class UserServiceImpl implements UserDtoIn {
         user.setFirstname(o.getFirstname());
         user.setLastname(o.getLastname());
 
-        Collection<Weight> list = new ArrayList<>();
-        for (WeightDto weightDto : o.getWeightsById()) {
-            list.add(createWeight(weightDto));
-        }
-
-        user.setWeightsById(list);
-
-        for (Users.RoleType roleType : Users.RoleType.values()) {
-            if (o.getRole().toString().equals(roleType.toString())) {
-                user.setRole(roleType);
+        List<Weight> list = new ArrayList<>();
+        if (o.getWeightsById() != null) {
+            for (WeightDto weightDto : o.getWeightsById()) {
+                list.add(WeightServiceImpl.getInstance().createWeight(weightDto));
             }
+
+            user.setWeightsById(list);
         }
         return userDao.update(user);
     }
@@ -106,14 +92,10 @@ public class UserServiceImpl implements UserDtoIn {
         user.setFirstname(o.getFirstname());
         user.setLastname(o.getLastname());
 
-        Collection<Weight> list = new ArrayList<>();
-        for (WeightDto weightDto : o.getWeightsById()) {
-            list.add(createWeight(weightDto));
-        }
-
-        for (Users.RoleType roleType : Users.RoleType.values()) {
-            if (o.getRole().toString().equals(roleType.toString())) {
-                user.setRole(roleType);
+        List<Weight> list = new ArrayList<>();
+        if (o.getWeightsById() != null) {
+            for (WeightDto weightDto : o.getWeightsById()) {
+                list.add(WeightServiceImpl.getInstance().createWeight(weightDto));
             }
         }
         return userDao.remove(user);
@@ -140,34 +122,6 @@ public class UserServiceImpl implements UserDtoIn {
         Users user = userDao.removeById(id);
         UserDto userDto = new UserDto(user);
         return userDto;
-    }
-
-    public Weight createWeight(WeightDto weightDto) {
-        Weight weight = new Weight();
-        weight.setId(weightDto.getId());
-        weight.setIdUser(weightDto.getIdUser());
-        weight.setDate(weightDto.getDate());
-        weight.setTime(weightDto.getTime());
-        weight.setWeight(weightDto.getWeight());
-
-        Collection<Friction> frictions = new ArrayList<>();
-        for (FrictionDto frictionDto : weightDto.getFrictionsById()) {
-            frictions.add(createFriction(frictionDto));
-        }
-        weight.setFrictionsById(frictions);
-
-        return weight;
-    }
-
-    public Friction createFriction(FrictionDto frictionDto) {
-        Friction friction = new Friction();
-        friction.setId(frictionDto.getId());
-        friction.setIdWeight(frictionDto.getIdWeight());
-        friction.setLoad(frictionDto.getLoad());
-        friction.setCoef(frictionDto.getCoef());
-
-        friction.setWeightByIdWeight(weightDao.getById(frictionDto.getIdWeight()));
-        return friction;
     }
 
 }

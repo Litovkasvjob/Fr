@@ -3,6 +3,7 @@ package dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.jboss.logging.Logger;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -10,6 +11,8 @@ import java.util.List;
 
 
 public abstract class AbstractDao<T, I extends Serializable> implements Dao<T, I> {
+
+    private static final Logger LOGGER = Logger.getLogger(AbstractDao.class.getName());
 
     private final Class<T> entityClass;
     private Transaction currentTransaction;
@@ -22,33 +25,37 @@ public abstract class AbstractDao<T, I extends Serializable> implements Dao<T, I
 
     public Session getSession() {
         currentSession = HibernateUtils.getSession();
+        LOGGER.info("Session open");
         return currentSession;
     }
 
     public Session getSessionWithTransaction() {
         currentSession = getSession();
         currentTransaction = currentSession.beginTransaction();
+        LOGGER.info("Transaction begin");
         return currentSession;
     }
 
     public void closeCurrentSession() {
         currentSession.close();
-        System.out.println("session close");
+        LOGGER.info("Session close");
     }
 
     public void closeCurrentSessionWithTransaction() {
         currentTransaction.commit();
-        currentSession.close();
-        System.out.println("session close");
+        LOGGER.info("Transaction commit");
+        closeCurrentSession();
     }
 
     public void pollbackTransaction() {
         currentTransaction.rollback();
+        LOGGER.info("Transaction rollback");
     }
 
     @Override
     public T getById(I key) {
         T obj = (T) getSession().get(entityClass, key);
+        LOGGER.info(obj.getClass() + " was taken by id");
         closeCurrentSession();
         return obj;
     }
@@ -58,7 +65,7 @@ public abstract class AbstractDao<T, I extends Serializable> implements Dao<T, I
         try {
             getSessionWithTransaction().save(o);
             closeCurrentSessionWithTransaction();
-            System.out.println("create " + o.getClass().getSimpleName());
+            LOGGER.info("create " + o.getClass().getSimpleName());
             return o;
         } catch (Exception e) {
             pollbackTransaction();
@@ -71,7 +78,7 @@ public abstract class AbstractDao<T, I extends Serializable> implements Dao<T, I
         try {
             getSessionWithTransaction().update(o);
             closeCurrentSessionWithTransaction();
-            System.out.println("update " + o.getClass().getSimpleName());
+            LOGGER.info("update " + o.getClass().getSimpleName());
             return true;
         } catch (Exception e) {
             pollbackTransaction();
@@ -84,7 +91,7 @@ public abstract class AbstractDao<T, I extends Serializable> implements Dao<T, I
         try {
             getSessionWithTransaction().delete(o);
             closeCurrentSessionWithTransaction();
-            System.out.println("delete " + o.getClass().getSimpleName());
+            LOGGER.info("delete " + o.getClass().getSimpleName());
             return true;
         } catch (Exception e) {
             pollbackTransaction();
@@ -95,6 +102,7 @@ public abstract class AbstractDao<T, I extends Serializable> implements Dao<T, I
     @Override
     public List<T> getList() {
         List<T> list = (List<T>) getSession().createCriteria(entityClass).list();
+        LOGGER.info("List of " + entityClass.getClass().getSimpleName());
         closeCurrentSession();
         return list;
     }

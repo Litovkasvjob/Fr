@@ -1,8 +1,8 @@
 package model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Serg on 17.09.2017.
@@ -14,13 +14,13 @@ public class Users {
     private String password;
     private String firstname;
     private String lastname;
-    private RoleType role;
-    private Collection<Weight> weightsById = new ArrayList<>();
+    private List<Weight> weightsById;
 
     public Users() {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -70,16 +70,6 @@ public class Users {
         this.lastname = lastname;
     }
 
-    @Basic
-    @Column(name = "role", nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    public RoleType getRole() {
-        return role;
-    }
-
-    public void setRole(RoleType role) {
-        this.role = role;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -93,8 +83,6 @@ public class Users {
         if (password != null ? !password.equals(users.password) : users.password != null) return false;
         if (firstname != null ? !firstname.equals(users.firstname) : users.firstname != null) return false;
         if (lastname != null ? !lastname.equals(users.lastname) : users.lastname != null) return false;
-        if (role != null ? !role.equals(users.role) : users.role != null) return false;
-
         return true;
     }
 
@@ -105,17 +93,16 @@ public class Users {
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
         result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
     }
 
 
-    @OneToMany(mappedBy = "usersByIdUser")
-    public Collection<Weight> getWeightsById() {
+    @OneToMany(mappedBy = "usersByIdUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    public List<Weight> getWeightsById() {
         return weightsById;
     }
 
-    public void setWeightsById(Collection<Weight> weightsById) {
+    public void setWeightsById(List<Weight> weightsById) {
 
         this.weightsById = weightsById;
     }
@@ -128,12 +115,6 @@ public class Users {
                 ", password='" + password + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", role=" + role +
                 '}';
     }
-
-    public enum RoleType {
-        ROLE_ADMIN, ROLE_USER
-    }
-
 }

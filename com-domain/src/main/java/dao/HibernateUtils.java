@@ -12,18 +12,9 @@ import org.hibernate.service.ServiceRegistry;
  */
 public class HibernateUtils {
     private static final SessionFactory ourSessionFactory;
-    //private static final ServiceRegistry serviceRegistry;
 
     static {
         try {
-            //Configuration configuration = new Configuration();
-           // configuration.configure();
-
-            //serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-            //ourSessionFactory = configuration.buildSessionFactory(serviceRegistry);
-            //ourSessionFactory = new Configuration().configure().buildSessionFactory();
-
-
             Configuration configuration = new Configuration().configure();
             StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
             .applySettings(configuration.getProperties());
@@ -35,8 +26,11 @@ public class HibernateUtils {
 
     public static Session getSession() throws HibernateException {
         Session session = ourSessionFactory.openSession();
-        System.out.println("session open");
         return session;
+    }
+
+    public static void shutdown() {
+        ourSessionFactory.close();
     }
 
 }
