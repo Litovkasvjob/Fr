@@ -19,38 +19,46 @@ public class App {
     public static void main(String[] args) {
 
         UserDto userDto = new UserDto();
-        userDto.setFirstname("sdssssss");
-        userDto.setLastname("ttttttt");
-        userDto.setLogin("ghj");
-        userDto.setPassword("gkblu");
-        UserServiceImpl.getInstance().create(userDto);
-        UserDto userDto1 = UserServiceImpl.getInstance().getById(42);
+        userDto.setFirstname("22sfg");
+        userDto.setLastname("222fgdfgrrrrrrr");
+        userDto.setLogin("r222dfdf");
+        userDto.setPassword("22fgdfgdfu");
+        UserDto userDto1 = UserServiceImpl.getInstance().create(userDto);
+
         System.out.println(userDto1);
 
         List<WeightDto> list = new ArrayList<>();
         WeightDto weightDto = new WeightDto();
         weightDto.setIdUser(userDto1.getId());
-        weightDto.setTime(62);
-        weightDto.setWeight(0.456);
+        weightDto.setTime(45);
+        weightDto.setWeight(0.4542);
         weightDto.setDate(new Date());
         weightDto.setUsersByIdUser(userDto1);
 
+        list.add(weightDto);
+        userDto1.setLogin("rtewasrwe");
+        userDto1.setWeightsById(list);
+
+        UserServiceImpl.getInstance().update(userDto1);
+        System.out.println(userDto1);
+
+
+
+/*
         FrictionDto frictionDto = new FrictionDto();
         frictionDto.setLoads(500);
         frictionDto.setCoef(0.15);
         frictionDto.setWeightByIdWeight(weightDto);
-
         frictionDto.setIdWeight(2); //????
 
         List<FrictionDto> list1 = new ArrayList<>();
         list1.add(frictionDto);
         weightDto.setFrictionsById(list1);
-        list.add(weightDto);
-        userDto1.setLogin("ewrwer");
-        userDto1.setWeightsById(list);
+        *//*
 
-        UserServiceImpl.getInstance().update(userDto1);
-        System.out.println(UserServiceImpl.getInstance().getById(42));
+
+
+
 
 
 
@@ -65,4 +73,5 @@ public class App {
         weightDto.setUsersByIdUser(userDto);*/
 
     }
+
 }

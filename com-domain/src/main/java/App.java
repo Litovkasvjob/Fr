@@ -1,5 +1,7 @@
 import dao.DaoFactory;
+import dao.UserDao;
 import model.Friction;
+import model.Users;
 import model.Weight;
 
 import java.util.List;
@@ -10,13 +12,14 @@ import java.util.List;
 public class App {
     public static void main(String[] args) {
 
-        //UserDao userDao = DaoFactory.getInstance().getUserDao();
-//        Users user = new Users();
-//        user.setLogin("litovka1");
-//        user.setPassword("root");
-//        user.setFirstname("Serg");
-//        user.setLastname("Litovka");
-//        userDao.create(user);
+        UserDao userDao = DaoFactory.getInstance().getUserDao();
+        Users user = new Users();
+        user.setLogin("222litovka1");
+        user.setPassword("222oot");
+        user.setFirstname("S333erg");
+        user.setLastname("333Litovka");
+        Users users = userDao.create(user);
+        System.out.println(users.getId());
 
 //        Users users = userDao.getById(10);
 //        users.setLogin("papa");

@@ -4,6 +4,7 @@ import dao.DaoFactory;
 import dao.FrictionDao;
 import dao.WeightDao;
 import dto.FrictionDto;
+import dto.WeightDto;
 import model.Friction;
 import service.app.FrictionDtoIn;
 
@@ -41,9 +42,16 @@ public class FrictionServiceImpl implements FrictionDtoIn {
 
     @Override
     public FrictionDto create(FrictionDto o) {
-        Friction friction = createFriction(o);
-        FrictionDto frictionDto = new FrictionDto(friction);
-        return frictionDto;
+        Friction friction = new Friction();
+        //friction.setId(o.getId());
+        friction.setIdWeight(o.getIdWeight());
+        friction.setLoads(o.getLoads());
+        friction.setCoef(o.getCoef());
+
+        friction.setWeightByIdWeight(weightDao.getById(o.getIdWeight()));
+        Friction frictionReturn = frictionDao.create(friction);
+        o.setId(frictionReturn.getId());
+        return o;
     }
 
     @Override
@@ -60,13 +68,7 @@ public class FrictionServiceImpl implements FrictionDtoIn {
 
     @Override
     public boolean remove(FrictionDto o) {
-        Friction friction = new Friction();
-        friction.setId(o.getId());
-        friction.setIdWeight(o.getIdWeight());
-        friction.setLoads(o.getLoads());
-        friction.setCoef(o.getCoef());
-
-        friction.setWeightByIdWeight(weightDao.getById(o.getIdWeight()));
+        Friction friction = frictionDao.getById(o.getId());
         return frictionDao.remove(friction);
     }
 
@@ -79,15 +81,23 @@ public class FrictionServiceImpl implements FrictionDtoIn {
         return list;
     }
 
-    public Friction createFriction(FrictionDto frictionDto) {
+    public Friction createFriction(FrictionDto frictionDto, WeightDto weightDto) { //right
         Friction friction = new Friction();
-        friction.setId(frictionDto.getId()); //TODO: check maybe error
-        friction.setIdWeight(frictionDto.getIdWeight());
+        friction.setIdWeight(weightDto.getId());
         friction.setLoads(frictionDto.getLoads());
         friction.setCoef(frictionDto.getCoef());
-
         friction.setWeightByIdWeight(weightDao.getById(frictionDto.getIdWeight()));
         Friction frictionReturn = frictionDao.create(friction);
         return frictionReturn;
+    }
+
+    public Friction updateFriction(FrictionDto frictionDto) { //right
+        Friction friction = frictionDao.getById(frictionDto.getId());
+
+        friction.setLoads(frictionDto.getLoads());
+        friction.setCoef(frictionDto.getCoef());
+        frictionDao.update(friction);
+
+        return friction;
     }
 }

@@ -21,7 +21,7 @@ public class FrictionDto {
         this.idWeight = friction.getIdWeight();
         this.loads = friction.getLoads();
         this.coef_friction = friction.getCoef();
-        this.weightByIdWeight = new WeightDto(friction.getWeightByIdWeight());
+
 
     }
 
@@ -91,7 +91,8 @@ public class FrictionDto {
         return weightByIdWeight;
     }
 
-    public void setWeightByIdWeight(WeightDto weightByIdWeight) {
+    public FrictionDto setWeightByIdWeight(WeightDto weightByIdWeight) {
         this.weightByIdWeight = weightByIdWeight;
+        return this;
     }
 }

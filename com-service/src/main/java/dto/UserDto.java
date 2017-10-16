@@ -30,7 +30,7 @@ public class UserDto {
         if (user.getWeightsById() != null) {
             weightsById = new ArrayList<>();
             for (Weight weight : user.getWeightsById()) {
-                weightsById.add(new WeightDto(weight));
+                weightsById.add(new WeightDto(weight).setUsersByIdUser(this));
             }
         }
 
