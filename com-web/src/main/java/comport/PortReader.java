@@ -11,9 +11,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.BlockingQueue;
 
-/**
- * @author mstetsenko
- */
 
 public class PortReader implements SerialPortEventListener { /*Слушатель срабатывающий по появлению данных на COM-порте*/
 
@@ -36,6 +33,7 @@ public class PortReader implements SerialPortEventListener { /*Слушател�
 
         if (event.isRXCHAR() && event.getEventValue() == 11) { /*Если происходит событие установленной маски и количество байтов в буфере более 0*/
             try {
+                //Thread.sleep(1000);
                 byte buffer[] = serialPort.readBytes(11);
                 //вытягиваю данные из 11 символов, которые приходят на компорт
                 byte buf[] = {buffer[4], buffer[5], buffer[6], buffer[7], buffer[8]};

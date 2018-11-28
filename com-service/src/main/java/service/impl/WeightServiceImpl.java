@@ -73,29 +73,11 @@ public class WeightServiceImpl implements WeightDtoIn {
 
     @Override
     public boolean update(WeightDto weightDto) {
-        Weight weight = weightDao.getById(weightDto.getId());
 
-        weight.setIdUser(weightDto.getIdUser());
-        weight.setDate(weightDto.getDate());
-        weight.setTime(weightDto.getTime());
-        weight.setWeight(weightDto.getWeight());
-
-        if (weightDto.getUsersByIdUser() != null) {
-            weight.setUsersByIdUser(userDao.getById(weight.getIdUser()));
+        if (updateWeight(weightDto).getClass().getSimpleName().equals(Weight.class.getSimpleName())) {
+            return true;
         }
-
-        if (weightDto.getFrictionsById() != null) {
-
-            List<Friction> frictions = weight.getFrictionsById(); //TODO: new list i think
-            for (int i = 0; i < frictions.size() - 1; i++) {
-                Friction friction = FrictionServiceImpl.getInstance().
-                        updateFriction(weightDto.getFrictionsById().get(i));
-            }
-
-            weight.setFrictionsById(frictions);
-        }
-
-        return weightDao.update(weight);
+        return false;
     }
 
     @Override
@@ -125,10 +107,7 @@ public class WeightServiceImpl implements WeightDtoIn {
         weight.setDate(weightDto.getDate());
         weight.setTime(weightDto.getTime());
         weight.setWeight(weightDto.getWeight());
-
-        if (weightDto.getUsersByIdUser() != null) {
-            weight.setUsersByIdUser(userDao.getById(weight.getIdUser()));
-        }
+        weight.setUsersByIdUser(userDao.getById(userDto.getId()));
 
         Weight weightReturn = weightDao.create(weight);
         weightDto.setId(weightReturn.getId()); // right
@@ -159,32 +138,32 @@ public class WeightServiceImpl implements WeightDtoIn {
 
         List<Friction> list = new ArrayList<>();
 
-        if (o.getWeightsById() != null) {
+        if (weightDto.getFrictionsById() != null) {
 
-            for (int i = 0; i < o.getWeightsById().size() - 1; i++) {
+            for (int i = 0; i < weightDto.getFrictionsById().size() - 1; i++) {
 
-                for (int j = 0; j < user.getWeightsById().size() - 1; j++) {
+                for (int j = 0; j < weight.getFrictionsById().size() - 1; j++) {
 
-                    if (user.getWeightsById().get(j).getId() == o.getWeightsById().get(i).getId()) {
-                        Weight weight = WeightServiceImpl.getInstance().
-                                updateWeight(o.getWeightsById().get(i));
-                        list.set(i, weight);
+                    if (weight.getFrictionsById().get(j).getId() == weightDto.getFrictionsById().get(i).getId()) {
+                        Friction friction = FrictionServiceImpl.getInstance().
+                                updateFriction(weightDto.getFrictionsById().get(i));
+                        list.set(i, friction);
                         break;
                     }
 
-                    if (j == user.getWeightsById().size() - 1) {
-                        if (user.getWeightsById().get(j).getId() > o.getWeightsById().get(i).getId() ||
-                                user.getWeightsById().get(j).getId() < o.getWeightsById().get(i).getId()) {
+                    if (j == weight.getFrictionsById().size() - 1) {
+                        if (weight.getFrictionsById().get(j).getId() > weightDto.getFrictionsById().get(i).getId() ||
+                                weight.getFrictionsById().get(j).getId() < weightDto.getFrictionsById().get(i).getId()) {
                             //check for existence in db
-                            for (Weight weight : weightDao.getList()) {
-                                if (weight.getId() == o.getWeightsById().get(i).getId()) {
-                                    list.set(i, weight);
+                            for (Friction friction : frictionDao.getList()) {
+                                if (friction.getId() == weightDto.getFrictionsById().get(i).getId()) {
+                                    list.set(i, friction);
                                     break;
                                 }
                             }
-                            Weight weight = WeightServiceImpl.getInstance().
-                                    createWeight(o.getWeightsById().get(i), o);
-                            list.set(i, weight);
+                            Friction friction = FrictionServiceImpl.getInstance().
+                                    createFriction(weightDto.getFrictionsById().get(i), weightDto);
+                            list.set(i, friction);
                             continue;
                         }
                     }
@@ -193,22 +172,22 @@ public class WeightServiceImpl implements WeightDtoIn {
                 }
 
             }
-            //delete weight from list which was not removed
-            for (int i = 0; i < user.getWeightsById().size() - 1; i++) {
+            //delete friction from list which was not removed
+            for (int i = 0; i < weight.getFrictionsById().size() - 1; i++) {
 
-                for (int j = 0; j < o.getWeightsById().size() - 1; j++) {
+                for (int j = 0; j < weightDto.getFrictionsById().size() - 1; j++) {
 
-                    if (user.getWeightsById().get(i).getId() == o.getWeightsById().get(j).getId()) {
+                    if (weight.getFrictionsById().get(i).getId() == weightDto.getFrictionsById().get(j).getId()) {
                         break;
                     }
 
-                    if (j == o.getWeightsById().size() - 1) {
-                        weightDao.remove(user.getWeightsById().get(i));
+                    if (j == weightDto.getFrictionsById().size() - 1) {
+                        frictionDao.remove(weight.getFrictionsById().get(i));
                     }
                 }
             }
         }
-        user.setWeightsById(list);
+        weight.setFrictionsById(list);
         weightDao.update(weight);
 
         return weight;

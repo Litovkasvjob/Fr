@@ -27,7 +27,7 @@ public class LoginFilter implements Filter {
         Object o = session.getAttribute("user");
 
         if(o == null && !(o instanceof User)){
-            LOGGER.info("User is not initialised");
+            LOGGER.info("LoginFilter: User is not initialised");
             ((HttpServletResponse)resp).sendRedirect("/?notAuthorized=Please login");
         }else{
             User user = (User) o;

@@ -40,7 +40,7 @@ public class Load {
     public String toString() {
         return "Load{" +
                 "id=" + id +
-                ", load='" + load + '\'' +
+                ", load=" + load  +
                 '}';
     }
 }

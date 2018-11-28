@@ -11,10 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Serg on 26.08.2017.
@@ -22,14 +19,84 @@ import java.util.Map;
 @WebServlet(name = "FrictionServlet", urlPatterns = "/friction")
 public class FrictionServlet extends HttpServlet {
 
-    static final Logger LOGGER = Logger.getLogger(HomeServlet.class.getName());
+    static final Logger LOGGER = Logger.getLogger(FrictionServlet.class.getName());
 
+    private final String LOADS = "loads";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        LOGGER.info("FrictionServlet try to calculate f");
+
+        String str = request.getParameter("numbers");
+
+        System.out.println(str);
+
+        // parse data
+        String string0 = str.substring(2, str.length() - 2);
+
+        String reg = "\",\"";
+
+        String[] array0 = string0.split(reg);
+        int[] numbers = new int[array0.length];
+
+        for (int i = 0; i < array0.length; i++) {
+
+            Integer number = Integer.parseInt(array0[i]);
+            numbers[i]= number;
+
+        }
+        System.out.println(Arrays.toString(numbers));
+
+
+        String numbersData = request.getParameter("LOADS");
+ // parse data
+        String string = numbersData.substring(2, numbersData.length() - 2);
+
+        String s = "],\\[";
+
+        String[] array = string.split(s);
+
+        List<Load> loadList = new ArrayList<>();
+
+        for (int i = 0; i < array.length; i++) {
+
+            String[] inner = array[i].split(",");
+            Integer id = Integer.parseInt(inner[0]);
+            Double load = Double.parseDouble(inner[1]);
+            loadList.add(new Load(id, load));
+        }
+
+        System.out.println(loadList);
+
+
+        //TODO: Check for empty space in numbers and for 0 in loads and boundory of loads - numbers
+        HttpSession session = request.getSession();
+
+        List<String> forces = (List<String>) session.getAttribute("forсes");
+
+        System.out.println(forces);
+
+        Map<Integer, Double> friction = new LinkedHashMap<>();
+
+
+        for (int i = 0; i < numbers.length; i++) {
+
+            Double f = DataReader.calculateFriction(loadList, numbers[i], Integer.parseInt(forces.get(i)));
+            friction.put(Integer.parseInt(forces.get(i)), f);
+        }
+
+        System.out.println(friction);
+        request.setAttribute("frictions", friction);
+        session.setAttribute("frictions", friction);
+//TODO: write data to DB or file
+
+        LOGGER.info("Application goes to friction.jsp");
+  //      request.getRequestDispatcher("/WEB-INF/views/friction.jsp").forward(request, response);
+//response.sendRedirect("/WEB-INF/views/friction.jsp");
+
     }
 
-    private final String LOADS = "loads";
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         LOGGER.info("FrictionServlet try to calculate f");
@@ -43,10 +110,12 @@ public class FrictionServlet extends HttpServlet {
 
         System.out.println(data);
 
+        //TODO: Check for empty space in numbers and for 0 in loads and boundory of loads - numbers
+
 
         List<String> forces = (List<String>) session.getAttribute("forсes");
 
-        System.out.println(forces.toString());
+        System.out.println(forces);
 
         Map<Integer, Double> friction = new LinkedHashMap<>();
 
@@ -59,7 +128,6 @@ public class FrictionServlet extends HttpServlet {
         request.setAttribute("frictions", friction);
 
 //TODO: write data to DB or file
-//TODO: clean session attribute?
 
         LOGGER.info("Application goes to friction.jsp");
         request.getRequestDispatcher("/WEB-INF/views/friction.jsp").forward(request, response);

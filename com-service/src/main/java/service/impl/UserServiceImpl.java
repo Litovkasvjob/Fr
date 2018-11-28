@@ -130,11 +130,11 @@ public class UserServiceImpl implements UserDtoIn {
     @Override
     public boolean remove(UserDto o) {
         Users user = userDao.getById(o.getId());
-        if (o.getWeightsById() != null) {
-            for (WeightDto weightDto : o.getWeightsById()) {
-                WeightServiceImpl.getInstance().remove(weightDto);
+/*        if (user.getWeightsById() != null) {
+            for (Weight weight : user.getWeightsById()) {
+               weightDao.remove(weight);
             }
-        }
+        }*/
         return userDao.remove(user);
     }
 

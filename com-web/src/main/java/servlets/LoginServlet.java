@@ -57,7 +57,7 @@ public class LoginServlet extends HttpServlet {
 
                     HttpSession session = request.getSession(true);
                     session.setAttribute("user", user);
-                    response.addCookie(new Cookie("sid", session.getId()));//TODO: for what do we add cookie
+                    //response.addCookie(new Cookie("sid", session.getId()));//TODO: for what do we add cookie
                     response.sendRedirect("home");
                 } else {
                     errors.add("User not found");

@@ -1,6 +1,8 @@
 package util;
 
 import domain.Load;
+import org.apache.log4j.Logger;
+import servlets.LoginServlet;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -16,12 +18,15 @@ public class DataReader {
     public static Scanner scanner = new Scanner(System.in);
     public static Properties prop = new Properties();
 
-    public static List<Load> loadData(String com, String fileName) {
+    static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
+
+
+    public static List<Load> loadData(InputStream inputStream, String fileName) {
 
         List<Load> loads = new ArrayList<>();
 
         try {
-            loads = readFile(fileName);
+            loads = readFile(inputStream, fileName);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -32,6 +37,8 @@ public class DataReader {
     }
 
     public static List loadForces() {
+
+        //TODO: Create page for taking forces row
 
         List forces = new ArrayList();
 
@@ -75,7 +82,7 @@ public class DataReader {
         double f = 0;
         //average coefficient of friction
 
-        Load ff = data.get(0);// to load correct data
+        Load ff = data.get(0);// to load correct data `cos list
 
         for (int i = 0; i < d; i++) {
             //Load value on the sensor (N)
@@ -91,16 +98,16 @@ public class DataReader {
     }
 
 
-    public static List<Load> readFile(String fileName) throws FileNotFoundException {
+    public static List<Load> readFile(InputStream inputStream, String fileName) throws FileNotFoundException {
 
         List<Load> loads = new ArrayList<>();
 
-        exists(fileName);
+       // exists(fileName);
 
+        LOGGER.info("Reading data from file");
 
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(fileName), StandardCharsets.UTF_8))) {
+                new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
 

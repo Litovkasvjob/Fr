@@ -56,7 +56,7 @@ public class FrictionServiceImpl implements FrictionDtoIn {
 
     @Override
     public boolean update(FrictionDto o) {
-        Friction friction = new Friction();
+        Friction friction = frictionDao.getById(o.getId());
         //friction.setId(o.getId());
         friction.setIdWeight(o.getIdWeight());
         friction.setLoads(o.getLoads());
@@ -86,7 +86,7 @@ public class FrictionServiceImpl implements FrictionDtoIn {
         friction.setIdWeight(weightDto.getId());
         friction.setLoads(frictionDto.getLoads());
         friction.setCoef(frictionDto.getCoef());
-        friction.setWeightByIdWeight(weightDao.getById(frictionDto.getIdWeight()));
+        friction.setWeightByIdWeight(weightDao.getById(weightDto.getId()));
         Friction frictionReturn = frictionDao.create(friction);
         return frictionReturn;
     }

@@ -11,7 +11,7 @@
     <title>Write Data</title>
 </head>
 <body>
-<form action="home" method="post">
+<form action="home" method="post" enctype="multipart/form-data">
     <table>
         <tr>
             <td>Введите номер COM порта</td>

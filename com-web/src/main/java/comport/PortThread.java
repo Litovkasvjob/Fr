@@ -7,9 +7,7 @@ import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;
 
-/**
- * @author mstetsenko
- */
+
 public class PortThread extends Thread {
 
     final Logger LOGGER = Logger.getLogger(PortThread.class.getName());

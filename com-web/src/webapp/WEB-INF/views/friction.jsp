@@ -20,6 +20,45 @@
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
     <script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	
+	
+	<script>
+        google.charts.load('current', {packages: ['corechart', 'line']});
+        google.charts.setOnLoadCallback(drawBasic);
+
+        function drawBasic() {
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'load');
+            data.addColumn('number', 'friction');
+
+            data.addRows([
+                <c:forEach var="friction" items="${frictions}">
+                
+                [${friction.key}, ${friction.value}],
+              
+                 </c:forEach>
+            ]);
+
+            var options = {
+                hAxis: {
+                    title: 'load'
+                },
+                vAxis: {
+                    title: 'friction'
+                },
+                width:  500,
+                height: 300
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        }
+	</script>
+
 
 
     <style type="text/css">
@@ -41,6 +80,7 @@
         .center {
             text-align: center;
         }
+
     </style>
 </head>
 <body>
@@ -68,18 +108,32 @@
 
                             </tr>
                         </c:forEach>
-                        <td class="active" colspan="2">
-                            <center>
-                                <a class="btn btn-info" href="${base}/home">Home</a>
-                            </center>
-                        </td>
+                        <tr>
+                            <td class="active" colspan="2">
+                                <center>
+                                    <a class="btn btn-info" href="${base}/home">Home</a>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="active" colspan="2">
+                                <center>
+                                    <a class="btn btn-info" href="${base}/logout">Log out</a>
+                                </center>
+                            </td>
+                        </tr>
+                        
                         </tbody>
+                       
                     </table>
-                    <img src="${graf}" alt="альтернативный текст">
+                    <div id="chart_div">
+    
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>

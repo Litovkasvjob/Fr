@@ -52,7 +52,9 @@ public class PortListener {
 
         LOGGER.info("PortListener stop port: " + numberCom);
         PortThread portThread = portThreadMap.get(numberCom);
+        portThread.getSerialPort().closePort();
         portThread.stop();
+
 
         portThreadMap.remove(numberCom);
         portMap.remove(numberCom);
